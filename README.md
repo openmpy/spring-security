@@ -62,3 +62,48 @@
     - CustomAuthenticationProvider 는 @Component 어노테이션으로 스프링 빈으로 등록함
     - config 패키지 아래에 생성
     - 인증 로직을 구현하기 위해 if 문을 추가 (id 값이 "suhwan" 이고 pw 값이 "1234" 일 때)
+
+---
+
+## 사용자 관리
+
+- UserDetails 인터페이스에 대해
+    - 사용자를 표현하는 UserDetails
+    - 권한을 표현하는 GrantedAuthority
+    - UserDetailsService, UserDetailsManager 를 활용하여 사용자 만들기, 암호 수정 등의 커스텀한 작업을 지원
+    - 다양한 유형의 UserDetailsManager (InMemoryUserDetailsManager, JdbcUserDetailsManager 등)
+
+## 사용자 관리를 위한 인터페이스 소개
+
+- UserDetailsService 와 UserDetailsManager 인터페이스를 이용하여 사용자 관리를 수행함 (CRUD 기능)
+    - UserDetailsService 는 사용자 이름으로 사용자를 검색함 (Read)
+    - UserDetailsManager 는 사용자 추가, 수정, 삭제 작업을 수행함 (Create, Update, Delete)
+- 두 인터페이스의 분리는 5대 객체 지향 프로그래밍 원칙(SOLID) 중 I 에 해당하는 Interface Segregation Principle 에 해당함
+    - 인터페이스 분리 원칙: 사용하지 않는 인터페이스에 강제로 의존해서는 안됨
+- 따라서, Read 와 Write 관련 인터페이스를 분리해두었기 때문에 프레임워크의 유연성이 향상됨
+    - 사용자를 인증하는 기능이 필요하면 UserDetailsService 인터페이스만 구현하면 됨
+    - 추가, 수정, 삭제 등 더 많은 기능을 제공해야 하면 UserDetailsManager 를 함께 구현하면 됨
+
+## UserDetailsService 소개
+
+- 유저 정보를 조회하는 메서드만 존재
+    - username 을 파라미터로 받아 UserDetails 객체를 반환하는 loadUserByUsername 메서드
+
+## UserDetailsManager 소개
+
+- 사용자 생성, 수정, 삭제, 암호 변경, 사용자 존재 여부 확인 메서드를 제공함
+    - UserDetailsService 를 extends 하고 있기 때문에 UserDetailsManager 를 구현하면 클라이언트는 UserDetailsService 까지 구현해야 함
+
+## 이용 권리의 집합, GrantedAuthority
+
+- 사용자는 사용자가 수행할 수 있는 작업을 나타내는 이용 권리의 집합을 가짐
+    - 보통 권한이라고 표현함
+    - 예시: 메뉴 조회 권한, 데이터 수정 권한, 데이터 대량 업로드 권한 등
+    - 사용자는 하나 이상의 권한을 가질 수 있으며 GrantedAuthority 라는 인터페이스를 통해 이를 구현할 수 있음
+
+## 사용자 상세 정보, UserDetails
+
+- 스프링 시큐리티 인증 흐름에서 사용자를 나타내는 방법은 필수로 숙지해야 함
+    - 사용자에 따라 애플리케이션은 제공할 수 있는 기능을 제한하기도 함
+- UserDetails 인터페이스를 기반으로 스프링 시큐리티에서는 사용자를 표현함
+    - 인터페이스이기 때문에 애플리케이션 수준에서 UserDetails 를 구현해야 함
