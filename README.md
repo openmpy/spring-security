@@ -107,3 +107,22 @@
     - 사용자에 따라 애플리케이션은 제공할 수 있는 기능을 제한하기도 함
 - UserDetails 인터페이스를 기반으로 스프링 시큐리티에서는 사용자를 표현함
     - 인터페이스이기 때문에 애플리케이션 수준에서 UserDetails 를 구현해야 함
+
+--- 
+
+## UserDetailsService 에 대한 이해
+
+- UserDetailsService 는 loadUserByUsername 이라는 하나의 메서드를 제공함
+    - 여기서 username 이라는 것은 사용자 ID 와 같은 개념으로 보면 됨
+    - 따라서 고유하다고 간주함 (Unique)
+    - 반환하는 사용자 정보는 UserDetails
+    - 만약 사용자가 존재하지 않으면 UsernameNotFoundException 을 던짐
+
+## UserDetailsManager 구현
+
+- 일반적인 애플리케이션에는 사용자를 관리하는 기능이 필요함
+    - 회원가입을 통해 새로운 사용자 추가
+    - 내 정보에서 사용자 정보 수정
+    - 회원 탈퇴를 위한 사용자 삭제
+- 이런 기능을 위해서는 UserDetailsManager 가 필요함
+    - 인터페이스로써 구현체가 필요함
