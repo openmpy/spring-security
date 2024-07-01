@@ -1,46 +1,38 @@
 package com.openmpy.security.config;
 
+import com.openmpy.security.user.InMemoryUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-        UserDetails suhwan = User.builder()
-                .username("suhwan")
+        UserDetails kim = User.withUsername("suhwan.kim")
                 .password("1234")
                 .build();
-        inMemoryUserDetailsManager.createUser(suhwan);
+        UserDetails lee = User.withUsername("suhwan.lee")
+                .password("2345")
+                .build();
+        UserDetails park = User.withUsername("suhwan.park")
+                .password("3456")
+                .build();
 
-        return inMemoryUserDetailsManager;
+        List<UserDetails> users = List.of(kim, lee, park);
+
+        return new InMemoryUserDetailsService(users);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-//                .authorizeHttpRequests((auth) -> auth.anyRequest().authenticated())
-                .authorizeHttpRequests((auth) -> auth.anyRequest().permitAll())
-                .httpBasic(withDefaults());
-
-        return http.build();
+        return NoOpPasswordEncoder.getInstance();
     }
 }
