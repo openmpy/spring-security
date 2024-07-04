@@ -126,3 +126,28 @@
     - 회원 탈퇴를 위한 사용자 삭제
 - 이런 기능을 위해서는 UserDetailsManager 가 필요함
     - 인터페이스로써 구현체가 필요함
+
+---
+
+## PasswordEncoder 인터페이스
+
+- PasswordEncoder 인터페이스를 통해 스프링 시큐리티에서 사용자 암호를 검증하는 방법을 알 수 있음
+    - 인증 프로세스에서 암호가 유효한지 확인하는 과정을 거침
+    - 암호에 대한 인코딩을 수행할 수 있음
+- 인터페이스에는 두 개의 메서드와 하나의 default 메서드가 정의되어 있음
+    - encode
+        - 주어진 암호의 해시를 제공
+        - 암호화를 수행
+    - matches
+        - 인코딩된 문자열이 원시 암호와 일치한지 검증
+    - upgradeEncoding
+        - 기본적으로 false 를 반환
+        - true 를 반환하도록 메서드를 재정의하면 보안 향상을 위해 인코딩된 암호를 다시 인코딩 함
+
+## DelegatingPasswordEncoder
+
+- 앱 버전이 올라감에 따라 다른 유형의 PasswordEncoder 를 적용해야 한다면?
+- 비즈니스 로직에 따라 특정 PasswordEncoder 를 따로 설정해야 한다면?
+- 사용자에 따라 다른 PasswordEncoder 를 적용해야 한다면?
+- 다양한 방법이 존재하지만 DelegatingPasswordEncoder 가 좋은 선택이 될 수 있음
+    - PasswordEncoder 인터페이스에 대한 구현체 중 하나로 자체 인코딩 알고리즘을 구현하는 대신 다른 구현체에 작업을 위임하는 역할을 함
